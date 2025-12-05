@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'mymaven'
+    }
+
+    stages {
+        stage('Checkout the code') {
+            steps {
+                echo 'Cloning the repo'
+                git 'https://github.com/nchoudharygit/DevOpsCodeDemo.git'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                echo 'Compile the code again...'
+                bat 'mvn compile'
+            }
+        }
+
+        stage('CodeReview') {
+            steps {
+                echo 'Running PMD Code Review'
+                bat 'mvn pmd:pmd'
+            }
+        }
+
+        stage('UnitTest') {
+            steps {
+                echo 'Executing Unit Tests'
+                bat 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Packaging the application'
+                bat 'mvn package'
+            }
+        }
+    }
+}
